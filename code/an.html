@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>animation1</title>
+</head>
+<body>
+
+<p>here we can animate the rectangle</p>
+
+<canvas id="canvas" width="1000" height="1000"></canvas>
+
+
+<script type="text/javascript">
+	
+
+var canvas = document.getElementById("canvas");
+
+var ctx = canvas.getContext("2d");
+
+var position =0;
+
+
+
+setInterval(function()
+			{
+
+				ctx.clearRect(0,0,100,100);
+				ctx.fillRect(position, 0 , 20,20);
+				position++;
+				if(position>1000)
+				{
+					position = 0;
+				}
+			},1);
+
+</script>
+</body>
+</html>

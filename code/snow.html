@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>snowman</title>
+</head>
+<body>
+
+<p>here we see snowman</p>
+
+<canvas id="canvas" width="1000" height="800"></canvas>
+<script>
+var canvas = document.getElementById("canvas");
+
+var ctx = canvas.getContext("2d");
+
+
+var snowman = function(x,y,rad)
+{
+ctx.beginPath();
+
+ctx.arc(x,y,rad,0,Math.PI *2 ,false);
+ctx.stroke();
+
+}
+ctx.strokeStyle="red";
+snowman(100,100,60);
+
+ctx.strokeStyle ="black";
+snowman(100,240,80);
+
+ctx.fillStyle = "blue";
+ctx.strokeStyle ="black";
+snowman(80,90,6);
+ctx.fill();
+
+ctx.fillStyle = "blue";
+ctx.strokeStyle ="black";
+snowman(120,90,6);
+ctx.fill();
+
+ctx.fillStyle = "orange";
+ctx.strokeStyle ="black";
+snowman(100,110,7);
+ctx.fill();
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

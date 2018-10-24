@@ -1,0 +1,48 @@
+<html>
+<body>
+	<p>hello wallpaper</p>
+
+	<script src = "jquery-3.3.1.min.js"></script>
+
+
+	<script>
+
+var car = function(x,y)
+{
+	this.wheel = x;
+	this.bonut = y;
+}
+
+
+	var drawcar = function(car)
+	{
+	var carhtml = '<img src="2" alt="hello">';
+	
+	var ele = $(carhtml);
+	ele.css({position:"absolute",left:car.x,top:car.y});
+		
+
+$("body").append(ele);
+	}
+
+
+var tesla = new car(20,20)
+drawcar(tesla);
+
+
+car.prototype.moveRight = function()
+{
+
+	this.x + = 5;
+
+	car.css({left:this.x ,top:this.y});
+}
+
+
+
+</script>
+
+
+
+</body>
+</html>

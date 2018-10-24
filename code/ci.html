@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas</title>
+</head>
+
+<body>
+
+
+<h1> drag the mouse at anywhere on the browser. </h1>
+
+    <canvas id="canvas" width="1400" height="800" style="background-color: red;">
+      
+
+
+
+    </canvas>
+
+
+
+    <script src="jquery-3.3.1.min.js"></script>
+
+    <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    var circle = function (x, y, radius, fillCircle) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+      if (fillCircle) {
+        ctx.fill();
+      } else {
+        ctx.stroke();
+      }
+    };
+    // HERE WE USE offSet() METHOD .THIS METHOD RETURNS OR SET THE CO-ORDINATES OF THE HTML ELELMENTS.
+    $('canvas').mousemove(function (event) 
+    {
+      circle(event.offsetX, event.offsetY, 3, true);
+    });
+    </script>
+</body>
+</html>

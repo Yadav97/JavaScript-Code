@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>conversion</title>
+</head>
+<body>
+<p>here we can convert the keycodes to their correspoonding names</p>
+
+<script src ="jquery-3.3.1.min.js"></script>
+
+
+
+
+
+<script>
+
+var keynames = {32:"space key", 72:"h key" ,37:"left arrow key" ,38:"up arrow key" , 39:"right arrow key" , 40:"down arrow key"}
+
+
+
+$("body").keydown(function(event){alert("you press the "+keynames[event.keyCode]);})
+</script>
+
+</body>
+</html>

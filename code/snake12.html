@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>we create the snake using javascript</title>
+</head>
+<body>
+
+
+<p>we create the snake using javascript</p>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+
+// SET UP THE CANVAS
+
+
+var canvas = document.getElementById("canvas");
+
+var ctx = canvas.getContext("2d");
+
+
+// HERE WE SET THE HEIGHT AND WIDTH OF THE CANVAS MEANS JO HUMNE CANVAS TAG MEIN JO HEIGHT AND WIDTH DI HAI WOH "VAR WIDTH AND VAR HEIGHT MEIN STORE HOGI" . SO WIDTH AND HEIGHT SET TO BE 400 PIXELS.
+
+var width  = canvas.width;
+var height = canvas.height;
+
+// WE MAKE GRID IN CANVAS SO HEIGHT  OF CANVAS IS 400 PX AND WIDTH OF CANVAS IS 400PX;
+
+
+//HERE WE SET VAR WIDTHINBLOCKS TELL US HOW MANY BLOCKS WIDE THE CANVAS IS .MEANS CANVAS KI WIDTH 40 BLOCKS SE BANI HOGI.
+// AND HEIGHTINBLOCKS TELLS US HOW MANY BLOCKS HEIGHT THE CANVAS IS MEANS JO CANVAS KI HEIGHT HOGI WOH 40 BLOCKS KI HOGI.
+
+var blocksize = 10;
+var widthinblocks = width/blocksize;
+var heightinblocks = height/blocksize;
+
+// SET THE SCORE VAR TO 0
+
+var score=0;
+
+//  NOW WE CREATE THE BORDER FOR CANVAS.
+
+
+var drawborder = function()
+{
+	ctx,fillStyle = "grey";
+// AT (O,O) POINT PAR EK RECTANGLE HONA CHAIYE JISKI WIDTH 400PIXELS HAI AND HEIGHT HAI 10 SO YEH RACTANGLE TOP WAALA RECTANGLE BANEGA MEANS BORDER.
+ctx.fillRect(0,0,width,blocksize);
+// AT (O,390)(means x=0 and y=390 means y 390 niche hoga ) POINT PAR EK RECTANGLE HONA CHAIYE JISKI WIDTH 400PIXELS HAI AND HEIGHT HAI 10 SO YEH RACTANGLE WALLA (MEANS NICHE BANGEA )RECTANGLE BANEGA MEANS BORDER.
+ctx.fillRect(0,height - blocksize,width,blocksize);
+
+// rectangle at left
+ctx.fillRect(0,0 ,blocksize,height);
+
+// rectangle at right;
+ctx.fillRect( width-blocksize,0 , blocksize,height);
+
+}
+
+// DRAW THE SCORE AT TOP-LEFT CORNER.
+
+var drawscore = function()
+{
+	ctx.font ="20px Comic Sans";//SIZE AND STYLE OF TEXT
+	ctx.fillStyle = "black" //SET  THE COLOR OF TEXT
+	ctx.textAlign = "left";
+	ctx.textBaseline = "top";
+	ctx.fillText("score" + score , blocksize ,blocksize);
+
+}
+
+
+//CLEAR THE INTERVAL OR STOP THE EXECUTION OF FUNCTION THAT IS EXECUTED BY THE setInterval() MAETHOD .AND DISPLAY THE GAME OVER TEXT
+
+var gameover = function()
+{
+clearInterval(intervalid);
+ctx.font = "70px Courier";
+ctx.fillStyle = "red";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+ctx.fillText("GAME OVER" , width/2 , height/2);
+
+}
+
+//HERE WE CREATE THE CIRCLE USING FUNCTION AND HERE X AND Y ARE THE CENTER POINTS OF THE CIRCLE .
+
+
+var circle = function(x,y,rad,filling)
+{
+
+ctx.beginPath();
+ctx.arc(x,y,rad ,0,Math.PI * 2 ,false);
+if(filling)
+{
+	ctx.fill(); // IF FILLING = TRUE SO THE CIRCLE IS MADE WITH FILL THE COLOR
+}
+else
+{
+	ctx.stroke();// ONLY OUTLINE OF THE CIRCLE IS APPERA IF(FLIING=FALSE).
+}
+}
+
+
+//WE CREATE THEIS BLOCK CONSTRUCTOR TO MAKE INVISIBLE BLOCKS IN THE GRID . BECAUSE TO HELP THIS BLOCK GRID WE EASILY MAKE SNAKE AND APPLE BLOCK.
+
+var block = function(col,row)
+{
+
+
+//THIS.COL IS THE VAR(col IS VARIABLE AND  this IS KEYWORD) OF THE BLOCK() FUNCTION.MEANS col AND row IS THE VARIABLE OF THE BLOCK FIUNCTION() AND WE PASS col nd row ARGS SO THATS WHY USE THIS KEYWORD.
+this.col = col; // THIS COL IS ARUMENT WAALE COL HAI
+this.row = row;	// THIS ROW IS ARUMENT WAALE ROW HAI
+
+}
+
+//NOW CREATE THE SQUARE AT  ANY (x,Y) BLOCK LOCATION.
+
+
+//WE USE PRTOTYPE PROPERTY TO ADD NEW THINGS TO THE FUNCTION IF NEEDED BY THE USE OF MAKING OBJCT AND THIS NEW THING IS ADDED BY THE PROTOTYPE OBJECT SO ALL MULTIPLE OBJECTS ACCESS THIS NEW THING.
+
+// HERE WE SEE THE EXAMPLE OF PROTOTYPE SEE COPY AND THE A4 SIZE PAPER.
+
+
+block.prototype.drawsquare = function(color)
+{
+var x = this.col * blocksize;//HERE THIS.COL IS THE VARIABLE OF BLOCK CONSTRUCTOR.
+var y = this.row * blocksize;//HERE THIS.ROW IS THE VARIABLE OF BLOCK CONSTRUCTOR.
+ctx.fillStyle = color;
+ctx.fillRect(x,y,blocksize,blocksize);
+}
+
+//NOW CREATE THW CIRCLE AT(x,y) BLOCK LOCATION
+
+block.prototype.drawcircle  = function(color)
+{
+
+//HERE THIS.COL AND THIS.ROW ARE THE VARIABLES OF THE BLOCK FUNCTION AND this KEYWORD IS REFER TO THE OBJECT OF BLOCK(JAB HUM BANAYENGE IN LATER).
+
+var xcenter = this.col * blocksize + blocksize /2;
+var ycenter = this.row * blocksize + blocksize /2;
+ctx.fillStyle = color;
+
+//HERE WE CALL THE CIRCLE FUNCTION AND PASS THE SOME ARGUMENTS AND LETS SEE ARGS
+//IN CENTER(X,Y,RAD,FILLING)
+//X =XCENTER;
+//Y = YCENTER.
+//RAD = BLOCKSIZE/2;
+//FILLING = TRUE
+
+//SO CIRCLE IS PRINT WITH COLOR JO HUMNE DRAWCIRCLE FUNCTION MEIN PASS KIYA HAI. BECAUSE FILLING TAKES TRUE, IF (TRUE)
+//{
+  	//CTX.FILL();
+//}
+
+circle(xcenter,ycenter,blocksize/2,true);
+}
+
+
+//CHECK THIS BLOCK CONTAIN CIRCLE IS IN SAME LOCATION AS ANOTHER BLOCK CONATIN SQUARE
+
+block.prototype.equal = function(otherblock)
+{
+
+return this.col === otherblock.col && this.row === otherblock.row;
+
+}
+
+// CREATE THE SNAKE CONSTRUCTOR;
+
+var snake = function()
+{
+
+
+//HERE WE MAKE THE SEGMENTS ARRAY VARIABLE OF SNAKE OBJECT AND WE CREATE THE ARRAY OF OBJECTS WHICH CREATE THE BLOCKS AT A GRID AND THERE ARE 3 OBJECT IS MADE AT BLOCK LOCATION AND SIMPLY MAKE THE SNAKE OF 3 BLOCKS ,HERE FIRST BLOCK IS CRATED AT (7,5) AND SECOND BLOCK IS CREATED AT (6,5) AND THIRD BLOCK IS CREATED AT (5,5);
+// SEE GRID AT COPY   
+
+
+// LETS SEE EXAMPLE
+//var obj1 = new Snake() //here s is captial in snake because of we make difference between methods and constructotr
+// alert(obj1.segments) they alert whole array
+//BECAUSE OF THIS KEYWORD IS REFER TO THE OBJ1.
+
+
+
+
+	this.segments = [new block(7,5) ,//head 
+	new block(6,5) ,//middle block
+	new block(5,5)];//tail block
+
+
+//NOTE:- HERE direction PROPERTY STORES THE CUREENT DIRECTION OF THE SNAKE
+// AND THE nextDirection PROPRRTY STORES THE DIRECTION IN WHICH THE SNAKE ANIMATE ON NEXT STEP.
+
+//AND HERE WE SET THIS VALUES IS CURRENTLY "RIGHT" AND LATER WE MAKE KEYDOWN HANDLER AND SETS "DOWN UP LEFT" STRINGS .
+ 
+
+	this.direction = "right";
+	this.nextDirection = "right";
+}
+snake.prototype.draw = function()
+{
+
+for (var j = 0 ; j<this.segments.length;j++)
+{
+	this.segments[j].drawsquare("BLOCKlue");
+}
+
+}
+
+//WE SAVE THE FIRST ELEMENT OF THIS.SEGMENT ARRAY IN HEAD
+//CREATE THE NEW VARIABLE IS NEWHEAD;
+
+//AND WE ASSIGN THE STRING OF this.nextDirection (WHICH STORES THE NEXT DIRCTION OF SNAKE) TO this.direction 
+
+snake.prototype.move = function()
+{
+	//WE STORE 
+	var head = this.segments[0]
+	var newhead;
+	this.direction = this.nextDirection;
+
+//here this.nextDirection stores the "right" and so we assign this to nextdirection .
+// and we check the condition if condition is true so block execute
+//and newhead var store this
+//new block() this call the block method as constructor and pass arguments 
+//x=head.col
+//y=head.row
+
+//and head .col  store the 7
+//and head .row  store the 5 
+//see this.segments
+
+
+	if(this.direction==="right") 
+		newhead = new block(head.col+1 ,head.row);
+	else if(this.direction==="down")
+		newhead = new block(head.col , head.row+1);
+	else if(this.direction==="left")
+		newhead = new block(head.col-1,head.row);
+	else if(this.direction==="up")
+		newhead = new block(head.col,head.row-1);
+
+if (this.checkcollision(newhead))
+{
+	gameover();
+}
+
+
+//add element newhead at begin of array called this.segments
+this.segments.unshift(newhead);
+
+if(newhead.equal(apple.position))
+{
+score++;
+apple.move();
+}
+else
+{
+	this.segments.pop();
+}
+
+}
+
+//check the snakes head is collided with itself or walls
+snake.prototype.checkcollision  = function(head)
+{
+
+var leftcollision = (head.col ===0);//WE SET leftcollision=0;
+var topcollision = (head.row ===0);////WE SET topcollision=0;
+var rightcollision = (head.col ===widthinblocks-1);//WE SET rightcollision=39;
+var bottomcollision = (head.col ===heightinblocks-1);
+//WE SET bottomcollision=39;
+
+
+//we determine whether the snake has collided with a wall by checking to see if leftCollision or
+//topCollision or rightCollision or bottomCollision is true , //using the || (or) operator. We save the Boolean result in the variable wallCollision
+
+var wallcollision = leftcollision || topcollision || rightcollision||bottomcollision;
+var selfcollision = false;
+
+for(var i = 0;i<this.segments.length;i++)
+{
+
+if(head.equal(this.segments[i]))
+{
+	selfcollision=true;
+}
+}
+return wallcollision || selfcollision
+//IF ANY OF ONE IS TRUE SO RETURN THAT
+}
+
+
+//set the snake nextDirection based on the keyboard.
+
+snake.prototype.setdirection = function(newDirection)
+
+{
+if(this.direction==="up" && newDirection==="left")
+	return;
+else if (this.direction==="right" && newDirection==="left") 
+	return;
+else if (this.direction==="down" && newDirection==="up") 
+	return;
+else if (this.direction==="left" && newDirection==="right") 
+	return;
+this.nextDirection = newDirection;
+
+}
+
+
+// the apple constructor
+var apple = function()
+{
+//this keyword refer the object of apple(). 
+	this.position = new block(10,10);
+
+	//position is object and create the apple at location block (10,10)
+}
+
+//drwa a circle at apple location(10,10)
+//To test out drawing the apple, run the following code:
+//var apple = new Apple();
+//apple.draw();
+
+apple.prototype.draw = function()
+{
+	this.position.drawcircle("limeGreen");
+}
+
+//move the apple to new random location
+apple.prototype.move=function()
+{
+var randomcol = Math.floor(Math.random() * (widthinblocks -2)) +1;
+
+var randomrow = Math.floor(Math.random() * (heightinblocks -2)) +1;
+this.position = new block(randomcol,randomrow);
+
+}
+
+//create the snae and apple objects
+
+var snake = new snake();
+var apple = new apple();
+
+//pass an anmiatiom function to setInterval function
+
+var intervalid = setInterval(function()
+					{
+						ctx.clearRect(0,0,width,height);
+						drawscore();
+						snake.move();
+						snake.draw();
+						apple.draw();
+						drawborder();
+
+					},100);
+
+//convert the keycodes to directions
+var directions  = {37:"left",38:"up",39:"right",40:"down"};
+
+//keydown handler
+
+$("body").keydown(function(event)
+					{
+						var newDirection = directions[event.keyCode];
+						if(newDirection!==undefined)
+						{
+							snake.setdirection(newDirection);
+						}
+					}
+
+
+	);
+
+
+</script>
+</body>
+</html>

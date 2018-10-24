@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>hangman game</title>
+</head>
+<body>
+	<h1>HANGMAN</h1>
+<script>
+
+var words = ["javascript","krishna","yadav","hello","world"];
+
+var word = words[Math.floor(Math.random() * words.length)]
+
+var answerarray = []
+for(var i =0;i<word.length;i++)
+{
+	answerarray[i] = "_";
+}
+
+var remainingletters  = word.length;
+
+while(remainingletters>0)
+{
+	alert(answerarray.join(" "))
+
+	var guess = prompt("guess a letter, or quit the game")
+
+	if(guess===null)
+	{
+		break;
+	}
+	else if(guess.length!=1)
+	{
+
+		alert("please enter the sinhle letter")
+	}
+	else 
+	{
+		for(var j=0;j<word.length;j++)
+		{	
+			if(word[j]===guess)
+			{
+			answerarray[j]=guess
+			remainingletters--;
+			}
+		}
+	}
+}
+
+
+alert(answerarray.join(" "));
+alert("good job the answer is" + word);
+</script>
+</body>
+</html>

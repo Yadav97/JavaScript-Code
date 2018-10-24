@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>bee animation</title>
+</head>
+<body>
+
+<p>here we create animated bee</p>
+
+<canvas id="canvas" width="200" height="200"></canvas>
+
+
+<script type="text/javascript">
+
+var canvas = document.getElementById("canvas");
+
+var ctx = canvas.getContext("2d");
+
+
+	
+var circle = function(x,y,rad,filling)
+{
+
+ctx.beginPath();
+ctx.arc(x,y,rad,0,Math.PI * 2 ,true)
+
+if(filling)
+{
+
+	ctx.fill();
+}
+
+else
+{
+
+ctx.stroke();
+
+}
+
+}
+
+
+
+var drawbee = function(x,y)
+{
+
+ctx.lineWidth =2;
+ctx.strokeStyle = "black"  //for creating outlines
+ctx.fillStyle = "gold"; //	
+
+circle(x,y,8,true);
+circle(x,y,8,false);
+circle(x-5,y-11,5,false);
+circle(x+5,y-11,5,false);
+circle(x-2,y-1,2,false);
+circle(x+2,y-1,2,false);
+
+}
+
+
+var update = function(co)
+{
+
+var off = Math.random()*4-2;
+co = co + off;
+
+if(co>200)
+	co=200;
+else
+	co=0;
+return co;
+
+}
+
+var x=60;
+var y =60;
+
+setInterval(function()
+			{
+
+				ctx.clearRect(0,0,200,200);
+				drawbee(x,y);
+				x=update(x);
+				y=update(y);
+
+				ctx.strokeRect(0,0,200,200);
+			},3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>X</title>
+</head>
+<body>
+
+<p>we create x sign on canvas</p>
+
+
+<canvas id = "canvas" width="500" height="500"></canvas>
+
+<script type="text/javascript">
+	
+var canvas = document.getElementById("canvas");
+var ctx  = canvas.getContext("2d");
+
+ctx.StrokeStyle="red";
+ctx.linewidth 	= 50;
+
+
+ctx.beginPath();
+ctx.moveTo(10,10);
+ctx.lineTo(60,60);
+
+ctx.moveTo(60,10);
+ctx.lineTo(10,60);
+ctx.stroke();
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

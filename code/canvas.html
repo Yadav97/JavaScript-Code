@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>canvas example</title>
+</head>
+<body>
+
+<p>hello world</p>
+<canvas id="canvas" width="2000" height="2000">hello world</canvas>
+
+	<script>
+	var canvas = document.getElementById("canvas");
+
+	var ctx = canvas.getContext("2d");
+	for(var i = 0 ; i<1000 ; i++)
+{
+	ctx.fillRect(i*10,i*10,10,10);
+}	
+	
+
+
+
+	</script>
+
+</body>
+</html>

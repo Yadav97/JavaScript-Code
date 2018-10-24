@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>many circles</title>
+</head>
+<body>
+<p>here we see many circles</p>
+
+<canvas id="canvas" width="1000" height="500"></canvas>
+
+
+
+<script>
+var canvas = document.getElementById("canvas");
+
+var ctx = canvas.getContext("2d");
+
+
+var circle = function(x,y,rad)
+{
+ctx.beginPath();
+
+ctx.arc(x,y,rad,0,Math.PI *2 ,false);
+ctx.stroke();
+
+}
+
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "red";
+circle(100,100,10);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "green";
+circle(100,100,20);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "blue";
+circle(100,100,30);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "orange";
+circle(100,100,40);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "cyan";
+circle(100,100,50);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "yellow";
+circle(100,100,60);
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
